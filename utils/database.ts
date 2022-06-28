@@ -41,7 +41,6 @@ export const getStrikes = (uuid: string) => {
             let str: any = await strikes.findOne({ where: { uuid: uuid } })
             if (!str) {
                 try {
-                    console.log("adding new user")
                     let newUser = strikes.build({ uuid: uuid })
                     await newUser.save()
                     resolve(0)
