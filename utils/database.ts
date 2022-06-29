@@ -56,3 +56,24 @@ export const getStrikes = (uuid: string) => {
         }
     })
 }
+
+/**
+ * Change strikes method
+ * 
+ * @param {String} uuid minecraft uuid
+ * @param {Number} amount new value for strikes
+ * @resolves void
+ * @rejects embed error object
+ */
+export const changeStrikes = (uuid: string, amount: number) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await sequelize.sync()
+            await strikes.update({ strikes: amount }, { where: { uuid: uuid } })
+            resolve(undefined)
+        } catch(e: any) {
+            let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${e.message}`) })
+            reject(err)
+        }
+    })
+}
