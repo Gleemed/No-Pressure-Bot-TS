@@ -1,5 +1,4 @@
 import { Command } from '../../structures/Command'
-import { MessageEmbed } from 'discord.js'
 
 import { name, gexpreq } from '../../configuration/guild.json'
 
@@ -24,8 +23,8 @@ export default new Command({
     run: async ({ interaction, args, client }) => {
 
         // Check if account is linked
-        let ign
-        if (!args[0]) {
+        let ign: string
+        if (!args.data[0]) {
             try {
                 let uuid = await checkLinked(interaction.user.id)
                 if (!uuid) {
@@ -33,12 +32,12 @@ export default new Command({
                     return interaction.followUp({ embeds: [err] })
                 }
                 let linkedIgn = await convertToIgn(uuid as string)
-                ign = linkedIgn
+                ign = linkedIgn as string
             } catch(e: any) {
                 return interaction.followUp({ embeds: [e] })
             }
         } else {
-            ign = args[0]
+            ign = args.data[0].options![0].value as string
         }
 
         // Check if valid ign
