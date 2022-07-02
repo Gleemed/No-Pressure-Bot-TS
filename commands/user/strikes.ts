@@ -7,7 +7,7 @@ import { convert } from '../../utils/ignConverter'
 
 export default new Command({
     name: "strikes",
-    description: "View your or another player's strikes.",
+    description: "View your or another player's strikes",
     options: [
         {
             name: "ign",

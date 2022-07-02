@@ -11,8 +11,8 @@ import { codeBlock } from '@discordjs/builders'
  * @rejects error embed object
  */
 export const getGuild = async (ign: string) => {
-    let guild: unknown
     return new Promise(async (resolve, reject) => {
+        let guild: any
         // Try to get guild from provided ign
         try {
             guild = await axios.get(`https://api.slothpixel.me/api/guilds/${ign}?key=${token}`)
@@ -45,8 +45,8 @@ export const getGuild = async (ign: string) => {
  * @rejects error embed object
  */
 export const getPlayer = async (ign: string) => {
-    let player: any
     return new Promise(async (resolve, reject) => {
+        let player: any
         try {
             player = await axios.get(`https://api.slothpixel.me/api/players/${ign}?key=${token}`)
         } catch(e: any) {

@@ -42,12 +42,17 @@ export const convert = async (ign: String) => {
  */
 export const convertToIgn = async (uuid: String) => {
     return new Promise(async (resolve, reject) => {
-        let player = await axios.get(`https://playerdb.co/api/player/minecraft/${uuid}`);
-        if (player.data.success == false) {
-            let errorEm = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`Invalid IGN provided.`) })
+        try {
+            let player = await axios.get(`https://playerdb.co/api/player/minecraft/${uuid}`);
+            if (player.data.success == false) {
+                let errorEm = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`Invalid IGN provided.`) })
+                reject(errorEm)
+            } else {
+                resolve(player.data.data.player.username)
+            }
+        } catch(e) {
+            let errorEm = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`An unknown error occured. Please try again.`) });
             reject(errorEm)
-        } else {
-            resolve(player.data.data.player.username)
         }
     })
 }

@@ -1,0 +1,16 @@
+{
+    "bedwars": {
+        "level": 100,
+        "final_k_d": 2,
+        "w_l": 0.5
+    },
+    "skywars": {
+        "level": 10,
+        "kill_death_ratio": 0.5,
+        "win_loss_ratio": 0.15
+    },
+    "duels": {
+        "wins": 1000,
+        "win_loss_ratio": 1
+    }
+}

@@ -18,8 +18,57 @@ export const checkLinked = (id: string) => {
     return new Promise(async (resolve, reject) => {
         try {
             await sequelize.sync()
-            let usr = await user.findOne({ where: { id: id } })
+            let usr: any = await user.findOne({ where: { id: id } })
             resolve(usr)
+        } catch(e: any) {
+            let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${e.name}`) })
+            reject(err)
+        }
+    })
+}
+
+/**
+ * Link method
+ * @param {String} id discord user id
+ * @param {String} uuid minecraft uuid
+ * @resolves void
+ * @rejects embed error object
+ */
+export const linkUser = (id: string, uuid: string) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await sequelize.sync()
+            let newUser = user.build({
+                id: id,
+                mcuuid: uuid
+            })
+            await newUser.save()
+            resolve(undefined)
+        } catch(e: any) {
+            let error: any
+            if (e.name == "SequelizeUniqueConstraintError") {
+                error = "Your account is already linked!"
+            } else {
+                error = e.name
+            }
+            let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${error}`) })
+            reject(err)
+        }
+    })
+}
+
+/**
+ * Unlink method
+ * @param {String} id discord user id
+ * @resolves void
+ * @rejects embed error object
+ */
+export const unlinkUser = (id: string) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await sequelize.sync()
+            await user.destroy({ where: { id: id } })
+            resolve(undefined)
         } catch(e: any) {
             let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${e.name}`) })
             reject(err)
@@ -45,13 +94,13 @@ export const getStrikes = (uuid: string) => {
                     await newUser.save()
                     resolve(0)
                 } catch(e: any) {
-                    let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${e.message}`) })
+                    let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${e.name}`) })
                     reject(err)
                 }
             }
             resolve(str.strikes)
         } catch(e: any) {
-            let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${e.message}`) })
+            let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${e.name}`) })
             reject(err)   
         }
     })
@@ -72,7 +121,7 @@ export const changeStrikes = (uuid: string, amount: number) => {
             await strikes.update({ strikes: amount }, { where: { uuid: uuid } })
             resolve(undefined)
         } catch(e: any) {
-            let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${e.message}`) })
+            let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`${e.name}`) })
             reject(err)
         }
     })

@@ -12,7 +12,7 @@ import { getGuild, getPlayer } from '../../utils/apiReq'
 
 export default new Command({
     name: "gexp",
-    description: "this is a test command",
+    description: "View your daily breakdown of guild experience for the week",
     options: [
         {
             name: "ign",
@@ -26,18 +26,18 @@ export default new Command({
         let ign: string
         if (!args.data[0]) {
             try {
-                let uuid = await checkLinked(interaction.user.id)
+                let uuid: any = await checkLinked(interaction.user.id)
                 if (!uuid) {
-                    let err = await embed({ title: 'ERROR!', color: errorColor, description: `Incorrect usage! Correct usage: ` + codeBlock(`/gexp <IGN>`) })
+                    let err = await embed({ title: 'ERROR!', color: errorColor, description: codeBlock(`Incorrect usage! Correct usage: /gexp <IGN>`) })
                     return interaction.followUp({ embeds: [err] })
                 }
-                let linkedIgn = await convertToIgn(uuid as string)
+                let linkedIgn = await convertToIgn(uuid.mcuuid as string)
                 ign = linkedIgn as string
             } catch(e: any) {
                 return interaction.followUp({ embeds: [e] })
             }
         } else {
-            ign = args.data[0].options![0].value as string
+            ign = args.data[0].value as string
         }
 
         // Check if valid ign
